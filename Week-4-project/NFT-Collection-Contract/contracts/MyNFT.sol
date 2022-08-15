@@ -12,21 +12,43 @@ contract MyNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
-   
+    
+     uint256 public maxSupply = 100;
+     uint256 public maxMintAmount = 50;
 
     constructor() ERC721("SaveThePlanetNFT", "STPNFT") {}
 
 
+
+
 // minting save the planet nft
      
-    function mint(string memory uri) public payable {
+    function singleMint(string memory uri) public payable {
         uint256 tokenId = _tokenIdCounter.current();
-        address cOwner = owner(); 
         _tokenIdCounter.increment();
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, uri);
-       
     }
+
+
+ // minting multiple nfts 
+  function mint(uint256 _mintAmount, string memory uri) public payable {
+    uint256 supply = totalSupply();
+    require(_mintAmount > 0);
+    require(_mintAmount <= maxMintAmount);
+    require(supply + _mintAmount <= maxSupply);
+    require(msg.sender == owner(), "You are not the owner so you can't mint");
+    
+    for (uint256 i = 1; i <= _mintAmount; i++) {
+      _safeMint(msg.sender, supply + i);
+      _setTokenURI(supply + i, uri);
+    }
+  }
+
+
+
+
+
 
 
 
