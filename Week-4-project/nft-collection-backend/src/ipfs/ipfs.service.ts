@@ -9,34 +9,49 @@ import { create, IPFSHTTPClient } from 'ipfs-http-client';
 import { createReadStream } from 'fs';
 import { concat as uint8ArrayConcat } from 'uint8arrays/concat';
 
-const DB_PATH = '../Resources/db/db.json';
+const DB_PATH = './db/db.json';
 
 @Injectable()
 export class IpfsService {
   db: JsonDB;
-  lastId: number;
+  lastId: number = 0;
   ipfsClient: IPFSHTTPClient;
 
   constructor() {
-    this.db = new JsonDB(new Config(DB_PATH, true, true, '/'));
+    this.db = new JsonDB(new Config(DB_PATH, true, true, "/" ));
     this.ipfsClient = create({
       host: 'localhost',
-      port: 5000,
+      port: 5001,
       protocol: 'http',
     });
     const data = this.db.getData('/');
+    
     this.lastId =
       data && Object.keys(data).length > 0
         ? Math.max(...Object.keys(data).map((key) => Number(key)))
         : -1;
   }
 
-  pushFile({ file }: { file: FileDataDto }) {
+  getAll() {
+    return this.db.getData('/');
+  }
+
+  get(fileId: number) {
+    return this.db.getData(`/${fileId}`);
+  }
+
+   pushFile(file: FileDataDto ) {
     const obj = new FileData(file);
     const fileId = ++this.lastId;
     this.db.push(`/${fileId}`, obj);
     return fileId;
-  }
+  } 
+ /*  pushFile({ file }: { file: FileDataDto }) {
+    const obj = new FileData(file);
+    const fileId = ++this.lastId;
+    this.db.push(`/${fileId}`, obj);
+    return fileId;
+  } */
 
   setMetadata(fileId: number, metadata: MetadataDto) {
     let file: any;
@@ -50,16 +65,10 @@ export class IpfsService {
     return this.get(fileId);
   }
 
-  getAll() {
-    return this.db.getData('/');
-  }
-
-  get(fileId: number) {
-    return this.db.getData(`/${fileId}`);
-  }
+ 
 
   getFileStream(filename: string) {
-    const fileStream = createReadStream(`../upload/${filename}`);
+    const fileStream = createReadStream(`./upload/${filename}`);
     return new StreamableFile(fileStream);
   }
 
@@ -74,7 +83,7 @@ export class IpfsService {
 
   async saveToIpfs(fileId: number) {
     const fileData: FileData = await this.get(fileId);
-    const fileLocation = `../upload/${fileData.file.storageName}`;
+    const fileLocation = `./upload/${fileData.file.storageName}`;
     const fileBytes = fs.readFileSync(fileLocation);
     const ipfsData = await this.ipfsClient.add(fileBytes);
     this.db.push(`/${fileId}/ipfs`, ipfsData);

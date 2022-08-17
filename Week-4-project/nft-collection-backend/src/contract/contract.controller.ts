@@ -54,7 +54,7 @@ export class ContractController {
     try {
       const result = await this.contractService.mintTokens(
         mintRequestDto.address,
-        mintRequestDto.amount,
+        mintRequestDto.tokenId,
       );
       return result;
     } catch (error) {

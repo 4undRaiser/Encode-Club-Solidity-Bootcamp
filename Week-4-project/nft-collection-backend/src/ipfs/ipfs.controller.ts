@@ -24,6 +24,7 @@ import { FileDataDto } from '../dtos/file-data.dto';
 import { SetMetadataDto } from '../dtos/set-metadata.dto';
 import { UploadIpfsDto } from '../dtos/upload-ipfs.dto';
 
+
 @ApiTags('file')
 @Controller()
 export class IpfsController {
@@ -93,7 +94,7 @@ export class IpfsController {
     }
   }
 
-  @Get('file/:id')
+  /* @Get('file/:id')
   @ApiOperation({
     summary: 'Get file of element by id from server storage',
     description: 'Gets the file of element at the requested index',
@@ -120,8 +121,8 @@ export class IpfsController {
       throw new HttpException(error.message, 503);
     }
   }
-
-  @Get('ipfs-get/:id')
+ */
+  /* @Get('ipfs-get/:id')
   @ApiOperation({
     summary: 'Get file of element by id from ipfs',
     description: 'Gets the file of element at the requested index',
@@ -140,7 +141,7 @@ export class IpfsController {
     @Param('id') id: number,
   ) {
     try {
-      const fileData = this.ipfsService.get(id).file;
+      const fileData = this.ipfsService.get(id);
       const fileStream = await this.ipfsService.getFromIpfs(id);
       res.set({
         'Content-Type': fileData.mimetype,
@@ -152,7 +153,7 @@ export class IpfsController {
       throw new HttpException(error.message, 503);
     }
   }
-
+ */
   @Post('file')
   @ApiOperation({
     summary: 'Register file',
@@ -187,7 +188,7 @@ export class IpfsController {
       file.filename,
       file.size,
     );
-    const savedObj = this.ipfsService.pushFile({ file: fileData });
+    const savedObj = this.ipfsService.pushFile(fileData);
     return savedObj;
   }
 

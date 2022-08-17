@@ -6,6 +6,7 @@ import { SharedModule } from './shared/shared.module';
 import { AccountModule } from './account/account.module';
 import { WalletModule } from './wallet/wallet.module';
 import { ContractModule } from './contract/contract.module';
+import { IpfsModule } from './ipfs/ipfs.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ContractModule } from './contract/contract.module';
     AccountModule,
     WalletModule,
     ContractModule,
+    IpfsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
