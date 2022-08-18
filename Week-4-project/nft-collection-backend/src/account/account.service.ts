@@ -11,7 +11,9 @@ export class AccountService {
 
   async getServerAccountBalance() {
     const serverAddress = this.walletService.walletAddress();
-    const serverWalletBalance = await this.providerService.getBalance(serverAddress);
+    const serverWalletBalance = await this.providerService.getBalance(
+      serverAddress,
+    );
     return serverWalletBalance;
   }
 }

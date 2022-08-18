@@ -14,46 +14,31 @@ const DB_PATH = './db/db.json';
 @Injectable()
 export class IpfsService {
   db: JsonDB;
-  lastId: number = 0;
+  lastId: number;
   ipfsClient: IPFSHTTPClient;
 
   constructor() {
-    this.db = new JsonDB(new Config(DB_PATH, true, true, '/' ));
+    this.db = new JsonDB(new Config(DB_PATH, true, true, '/'));
     this.ipfsClient = create({
       host: 'localhost',
       port: 5001,
       protocol: 'http',
     });
     const data = this.db.getData('/');
-    
     this.lastId =
       data && Object.keys(data).length > 0
         ? Math.max(...Object.keys(data).map((key) => Number(key)))
         : -1;
   }
 
-  getAll() {
-    return this.db.getData('/');
-  }
-
-  get(fileId: string) {
-    return this.db.getData(`/${fileId}`);
-  }
-
-   pushFile(file: FileDataDto ) {
+  pushFile({ file }: { file: FileDataDto }) {
     const obj = new FileData(file);
     const fileId = ++this.lastId;
     this.db.push(`/${fileId}`, obj);
     return fileId;
-  } 
- /*  pushFile({ file }: { file: FileDataDto }) {
-    const obj = new FileData(file);
-    const fileId = ++this.lastId;
-    this.db.push(`/${fileId}`, obj);
-    return fileId;
-  } */
+  }
 
-  setMetadata(fileId: string, metadata: MetadataDto) {
+  setMetadata(fileId: number, metadata: MetadataDto) {
     let file: any;
     try {
       file = this.db.getData(`/${fileId}/file`);
@@ -65,10 +50,16 @@ export class IpfsService {
     return this.get(fileId);
   }
 
- 
+  getAll() {
+    return this.db.getData('/');
+  }
+
+  get(fileId: number) {
+    return this.db.getData(`/${fileId}`);
+  }
 
   getFileStream(filename: string) {
-    const fileStream = createReadStream(`./upload/${filename}`);
+    const fileStream = createReadStream(`../upload/${filename}`);
     return new StreamableFile(fileStream);
   }
 
@@ -81,16 +72,16 @@ export class IpfsService {
     }
   }
 
-  async saveToIpfs(fileId: string) {
+  async saveToIpfs(fileId: number) {
     const fileData: FileData = await this.get(fileId);
-    const fileLocation = `./upload/${fileData.file.storageName}`;
+    const fileLocation = `../upload/${fileData.file.storageName}`;
     const fileBytes = fs.readFileSync(fileLocation);
     const ipfsData = await this.ipfsClient.add(fileBytes);
     this.db.push(`/${fileId}/ipfs`, ipfsData);
     return this.get(fileId);
   }
 
-  async getFromIpfs(fileId: string) {
+  async getFromIpfs(fileId: number) {
     const fileData: FileData = await this.get(fileId);
     if (!fileData.ipfs || !fileData.ipfs.path || fileData.ipfs.path.length == 0)
       throw new Error('File not found');
