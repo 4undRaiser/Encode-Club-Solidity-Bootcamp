@@ -29,10 +29,18 @@ export class ProviderService {
 
   async getBalance(address: string) {
     const balanceBN = await this.provider.getBalance(address);
-    return ethers.utils.formatEther(balanceBN);
+    const balance = ethers.utils.formatEther(balanceBN);
+    return balance;
   }
 
-  getBlockData(blockHashOrTag: string = 'latest') {
-    return this.provider.getBlock(blockHashOrTag);
+  async getBlockData(blockHashOrTag: string = 'latest') {
+    const block = await this.provider.getBlock(blockHashOrTag);
+    return block;
+  }
+
+  async getTransactionReceipt(hash: string) {
+    const tx = await this.provider.getTransaction(hash);
+    const receipt = await tx.wait();
+    return receipt;
   }
 }

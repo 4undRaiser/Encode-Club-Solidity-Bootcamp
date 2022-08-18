@@ -25,7 +25,8 @@ export class WalletController {
   })
   async getServerWallet() {
     try {
-      return this.walletService.walletAddress();
+      const result = this.walletService.walletAddress();
+      return result;
     } catch (error) {
       throw new HttpException(error.message, 503);
     }
