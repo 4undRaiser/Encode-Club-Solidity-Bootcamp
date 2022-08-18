@@ -5,5 +5,5 @@ export class UploadIpfsDto {
     required: true,
     description: 'Id of the file',
   })
-  id: number;
+  id: string;
 }

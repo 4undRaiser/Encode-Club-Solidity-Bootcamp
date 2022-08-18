@@ -6,7 +6,7 @@ export class SetMetadataDto {
     required: true,
     description: 'Id of the file',
   })
-  id: number;
+  id: string;
   @ApiProperty({
     required: true,
     description: 'File metadata',

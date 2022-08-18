@@ -85,7 +85,7 @@ export class IpfsController {
     description: 'The server is not configured correctly',
     type: HttpException,
   })
-  async getData(@Param('id') id: number) {
+  async getData(@Param('id') id: string) {
     try {
       const result = this.ipfsService.get(id);
       return result;
@@ -94,7 +94,7 @@ export class IpfsController {
     }
   }
 
-  /* @Get('file/:id')
+  @Get('file/:id')
   @ApiOperation({
     summary: 'Get file of element by id from server storage',
     description: 'Gets the file of element at the requested index',
@@ -108,7 +108,7 @@ export class IpfsController {
     description: 'The server is not configured correctly',
     type: HttpException,
   })
-  async getFile(@Response({ passthrough: true }) res, @Param('id') id: number) {
+  async getFile(@Response({ passthrough: true }) res, @Param('id') id: string) {
     try {
       const fileData: FileDataDto = this.ipfsService.get(id).file;
       const fileStream = this.ipfsService.getFileStream(fileData.storageName);
@@ -121,8 +121,8 @@ export class IpfsController {
       throw new HttpException(error.message, 503);
     }
   }
- */
-  /* @Get('ipfs-get/:id')
+ 
+  @Get('ipfs-get/:id')
   @ApiOperation({
     summary: 'Get file of element by id from ipfs',
     description: 'Gets the file of element at the requested index',
@@ -138,22 +138,22 @@ export class IpfsController {
   })
   async getFileIpfs(
     @Response({ passthrough: true }) res,
-    @Param('id') id: number,
+    @Param('id') id: string,
   ) {
     try {
       const fileData = this.ipfsService.get(id);
       const fileStream = await this.ipfsService.getFromIpfs(id);
-      res.set({
+     /*  res.set({
         'Content-Type': fileData.mimetype,
         'Content-Disposition': `attachment; filename="${fileData.fileName}"`,
-      });
+      }); */
       return fileStream;
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, 503);
     }
   }
- */
+
   @Post('file')
   @ApiOperation({
     summary: 'Register file',
