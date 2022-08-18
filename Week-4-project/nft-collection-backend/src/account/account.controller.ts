@@ -25,7 +25,8 @@ export class AccountController {
   })
   async getServerBalance() {
     try {
-      return this.accountService.getServerAccountBalance();
+      const result = await this.accountService.getServerAccountBalance();
+      return Number(result);
     } catch (error) {
       throw new HttpException(error.message, 503);
     }

@@ -3,11 +3,10 @@ import { IpfsService } from './ipfs.service';
 import { IpfsController } from './ipfs.controller';
 import { MulterModule } from '@nestjs/platform-express';
 
-
 @Module({
   imports: [
     MulterModule.register({
-      dest: './upload',
+      dest: '../upload',
     }),
   ],
   controllers: [IpfsController],
