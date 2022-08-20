@@ -107,7 +107,7 @@ export class IpfsController {
     description: 'The server is not configured correctly',
     type: HttpException,
   })
-  async getFile(@Response({ passthrough: true }) res, @Param('id') id: number) {
+  async getFile(@Response({ passthrough: true }) res, @Param('id') id: string) {
     try {
       const fileData: FileDataDto = this.ipfsService.get(id).file;
       const fileStream = this.ipfsService.getFileStream(fileData.storageName);

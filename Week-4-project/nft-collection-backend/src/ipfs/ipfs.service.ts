@@ -54,7 +54,7 @@ export class IpfsService {
     return this.db.getData('/');
   }
 
-  get(fileId: number) {
+  get(fileId: string) {
     return this.db.getData(`/${fileId}`);
   }
 
