@@ -25,6 +25,7 @@ export class ContractController {
     description: 'Token balance',
     type: Number,
   })
+  
   @ApiResponse({
     status: 503,
     description: 'The server is not connected to a valid provider',
@@ -38,7 +39,7 @@ export class ContractController {
       throw new HttpException(error.message, 503);
     }
   }
-
+/* 
   @Post('mint-token')
   @ApiOperation({
     summary: 'Mint Token',
@@ -80,5 +81,5 @@ export class ContractController {
     } catch (error) {
       throw new HttpException(error.message, 503);
     }
-  }
+  } */
 }

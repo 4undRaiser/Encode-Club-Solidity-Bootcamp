@@ -84,7 +84,7 @@ export class IpfsController {
     description: 'The server is not configured correctly',
     type: HttpException,
   })
-  async getData(@Param('id') id: number) {
+  async getData(@Param('id') id: string) {
     try {
       const result = this.ipfsService.get(id);
       return result;
@@ -93,7 +93,7 @@ export class IpfsController {
     }
   }
 
-  @Get('file/:id')
+  /* @Get('file/:id')
   @ApiOperation({
     summary: 'Get file of element by id from server storage',
     description: 'Gets the file of element at the requested index',
@@ -107,7 +107,7 @@ export class IpfsController {
     description: 'The server is not configured correctly',
     type: HttpException,
   })
-  async getFile(@Response({ passthrough: true }) res, @Param('id') id: string) {
+  async getFile(@Response({ passthrough: true }) res, @Param('id') id: number) {
     try {
       const fileData: FileDataDto = this.ipfsService.get(id).file;
       const fileStream = this.ipfsService.getFileStream(fileData.storageName);
@@ -119,9 +119,9 @@ export class IpfsController {
     } catch (error) {
       throw new HttpException(error.message, 503);
     }
-  }
+  } */
 
-  @Get('ipfs-get/:id')
+  /* @Get('ipfs-get/:id')
   @ApiOperation({
     summary: 'Get file of element by id from ipfs',
     description: 'Gets the file of element at the requested index',
@@ -151,7 +151,7 @@ export class IpfsController {
       console.error(error);
       throw new HttpException(error.message, 503);
     }
-  }
+  } */
 
   @Post('file')
   @ApiOperation({

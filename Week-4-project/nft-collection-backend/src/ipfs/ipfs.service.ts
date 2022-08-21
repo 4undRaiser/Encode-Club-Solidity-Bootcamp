@@ -38,7 +38,7 @@ export class IpfsService {
     return fileId;
   }
 
-  setMetadata(fileId: number, metadata: MetadataDto) {
+  setMetadata(fileId: string, metadata: MetadataDto) {
     let file: any;
     try {
       file = this.db.getData(`/${fileId}/file`);
@@ -55,7 +55,7 @@ export class IpfsService {
   }
 
   get(fileId: string) {
-    return this.db.getData(`/${fileId}`);
+    return this.db.getData(`/${fileId}/metadata`);
   }
 
   getFileStream(filename: string) {
@@ -72,7 +72,7 @@ export class IpfsService {
     }
   }
 
-  async saveToIpfs(fileId: number) {
+  async saveToIpfs(fileId: string) {
     const fileData: FileData = await this.get(fileId);
     const fileLocation = `../upload/${fileData.file.storageName}`;
     const fileBytes = fs.readFileSync(fileLocation);
@@ -81,7 +81,7 @@ export class IpfsService {
     return this.get(fileId);
   }
 
-  async getFromIpfs(fileId: number) {
+  async getFromIpfs(fileId: string) {
     const fileData: FileData = await this.get(fileId);
     if (!fileData.ipfs || !fileData.ipfs.path || fileData.ipfs.path.length == 0)
       throw new Error('File not found');

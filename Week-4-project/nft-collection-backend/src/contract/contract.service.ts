@@ -44,7 +44,7 @@ export class ContractService {
     return balance;
   }
 
-  async mintNFTToken(address: string, tokenId: number) {
+ /*  async mintNFTToken(address: string, tokenId: number) {
     let fileData: FileData = this.db.getData(`/${tokenId}`);
     const tx = await this.contractSignedInstance.safeMint(
       address,
@@ -52,7 +52,7 @@ export class ContractService {
       tokenId,
     );
     return tx;
-  }
+  } */
 
   checkSignature(address: string, amount: number, signature: string) {
     const signatureObject = { address: address, amount: amount };

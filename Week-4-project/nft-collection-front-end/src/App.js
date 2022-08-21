@@ -20,7 +20,7 @@ function App() {
 
   const [address, setAddress] = useState(null);
 
-  const web3 = createAlchemyWeb3(`https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`);
+  const web3 = createAlchemyWeb3(`https://eth-goerli.g.alchemy.com/v2/xiHtgd59SRD24sRMW9wQiUsLsikMmD0v`);
   const minterContract = new web3.eth.Contract(MyNFTAbi.abi, MyNFTAddress.MyNFT);
   
 
@@ -68,12 +68,13 @@ function App() {
 
 
   const addNFT = async (metaData)=>{
-
+    
      try {   
-        // mint the NFT and save the IPFS url to the blockchain
-         await minterContract.methods
-         .mint(metaData)
+        // mint the NFT and save the url to the blockchain
+         let transaction = await minterContract.methods
+         .Mint(metaData)
          .send({ from: address });
+         console.log(transaction);
      } catch (error) {
          console.log("Error uploading file: ", error);
      }
@@ -99,13 +100,16 @@ function App() {
         for (let i = 0; i < Number(nftsLength); i++) {
             const nft = new Promise(async (resolve) => {
                 const res = await minterContract.methods.tokenURI(i).call();
-                const meta = await fetchNftMeta(res);
-                
+                axios.defaults.baseURL = res;
+                const responseBody = (response) => response.data;
+                let data = await axios.get().then(responseBody);
+              
                 resolve({
+                    name: data.name,
+                    image: data.image,
+                    description: data.description,
                     index: i,
-                    name: meta.metadata.name,
-                    description: meta.metadata.description,
-                    image: meta.metadataimage,
+                    
                 });
             });
             nfts.push(nft);

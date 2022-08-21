@@ -27,8 +27,6 @@ const Cover = ({ name, coverImg, connect }) => {
               Connect Wallet
             </Button>
           </div>
-
-          <p className="mt-auto text-secondary">Powered by Polygon</p>
         </div>
     );
   }
